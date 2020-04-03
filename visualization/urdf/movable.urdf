@@ -7,8 +7,16 @@
         <color rgba="0 0 1 1"/>
     </material>
 
+    <material name="yellow">
+        <color rgba="1 1 0 1"/>
+    </material>
+
     <material name="white">
         <color rgba="1 1 1 1"/>
+    </material>
+
+    <material name="red">
+        <color rgba="1 0 0 1"/>
     </material>
 
     <link name="base_link">
@@ -37,7 +45,7 @@
                 <box size="${props['i3']['l_len']} ${l_width} ${l_width}"/>
             </geometry>
             <origin xyz="${props['i3']['l_xyz']}" rpy="${props['i3']['l_rpy']}"/>
-            <material name="blue"/>
+            <material name="yellow"/>
         </visual>
     </link>
 
@@ -47,7 +55,7 @@
                 <cylinder length="0.7" radius="0.06"/>
             </geometry>
             <origin xyz="0.35 0 0" rpy="0 1.57075 0"/>
-            <material name="blue"/>
+            <material name="red"/>
         </visual>
     </link>
 
