@@ -52,9 +52,9 @@
     <link name="link_3">
         <visual>
             <geometry>
-                <box size="0.2 0.2 1"/>
+                <box size="0.7 0.2 0.2"/>
             </geometry>
-            <origin xyz="0.35 0 0" rpy="0 1.57075 0"/>
+            <origin xyz="0 0 0" rpy="0 1.57075 0"/>
             <material name="red"/>
         </visual>
     </link>
