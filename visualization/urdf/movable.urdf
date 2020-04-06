@@ -52,7 +52,7 @@
     <link name="link_3">
         <visual>
             <geometry>
-                <cylinder length="0.7" radius="0.06"/>
+                <box size="0.2 0.2 0.7"/>
             </geometry>
             <origin xyz="0.35 0 0" rpy="0 1.57075 0"/>
             <material name="red"/>
@@ -78,6 +78,7 @@
         <parent link="link_2"/>
         <child link="link_3"/>
         <origin xyz="${props['i3']['j_xyz']}" rpy="${props['i3']['j_rpy']}"/>
+        <axis xyz="0 0 1"/>
     </joint>
 
 </robot>
