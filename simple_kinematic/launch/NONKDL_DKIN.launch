@@ -1,0 +1,8 @@
+ines (5 sloc)  218 Bytes
+ 
+<launch>
+    <param name="robot_description" command="xacro --inorder '$(find simple_kinematic)/urdf/movable.urdf'"/>
+    <param name="use_gui" value="true"/>
+
+    <node name="non_kdl" pkg="simple_kinematic" type="NONKDL_DKIN.py" />
+</launch>
