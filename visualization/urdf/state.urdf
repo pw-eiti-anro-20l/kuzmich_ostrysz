@@ -73,7 +73,7 @@
         <axis xyz="0 0 1"/>
     </joint>
 
-    <joint name="link2_to_link3" type="prismatic">
+    <joint name="link2_to_link3" type="fixed">
         <parent link="link_2"/>
         <child link="link_3"/>
         <origin xyz="${props['i3']['j_xyz']}" rpy="${props['i3']['j_rpy']}"/>
