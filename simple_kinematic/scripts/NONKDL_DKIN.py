@@ -6,12 +6,11 @@ import os
 from tf.transformations import *
 from sensor_msgs.msg import JointState
 from geometry_msgs.msg import PoseStamped
-from visualization_msgs.msg import Marker
 
 xaxis, yaxis, zaxis = (1, 0, 0), (0, 1, 0), (0, 0, 1)
 
 
-def correct(data):
+def correctPosition(data):
     if data.position[0] < borders['i1'][0] or data.position[0] > borders['i1'][1]:
         return False
 
@@ -24,8 +23,8 @@ def correct(data):
     return True
 
 
-def forward_kinematics(data):
-    if not correct(data):
+def simple_kinematics(data):
+    if not correctPosition(data):
         rospy.logerr('Incorrect position! ' + str(data))
         return
 
@@ -69,44 +68,18 @@ def forward_kinematics(data):
     pose.pose.orientation.w = qw
     pub.publish(pose)
 
-    marker = Marker()
-    marker.header.frame_id = 'base_link'
-    marker.type = marker.CUBE
-    marker.action = marker.ADD
-    marker.pose.orientation.w = 1
-
-    time = rospy.Duration()
-    marker.lifetime = time
-    marker.scale.x = 1
-    marker.scale.y = 1
-    marker.scale.z = 1
-    marker.pose.position.x = x;
-    marker.pose.position.y = y;
-    marker.pose.position.z = z;
-    marker.pose.orientation.x = qx;
-    marker.pose.orientation.y = qy;
-    marker.pose.orientation.z = qz;
-    marker.pose.orientation.w = qw;
-    marker.color.a = 0.7
-    marker.color.r = 0.0
-    marker.color.g = 0.0
-    marker.color.b = 1.0
-    marker_pub.publish(marker)
 
 if __name__ == '__main__':
     rospy.init_node('NONKDL_DKIN', anonymous=True)
 
-    pub = rospy.Publisher('maniulator1', PoseStamped, queue_size=10)
-    marker_pub = rospy.Publisher('nkdl_visualization', Marker, queue_size=100)
-
-    rospy.Subscriber('joint_states', JointState, forward_kinematics)
+    pub = rospy.Publisher('npose_stamped', PoseStamped, queue_size=10)
+    rospy.Subscriber('joint_states', JointState, simple_kinematics)
 
     params = {}
-    print os.path.dirname(os.path.realpath(__file__))
     with open(os.path.dirname(os.path.realpath(__file__)) + '/../mdh_value.json', 'r') as file:
         params = json.loads(file.read())
 
-    borders = {}
+    bounds = {}
     with open(os.path.dirname(os.path.realpath(__file__)) + '/../borders.json', 'r') as file:
         borders = json.loads(file.read())
 

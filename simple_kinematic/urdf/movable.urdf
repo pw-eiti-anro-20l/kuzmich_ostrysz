@@ -59,7 +59,7 @@
         </visual>
     </link>
 
-    <joint name="base_to_link1" type="continuous">
+    <joint name="base_link_to_link1" type="continuous">
         <parent link="base_link"/>
         <child link="link_1"/>
         <origin xyz="${props['i1']['j_xyz']}" rpy="${props['i1']['j_rpy']}"/>

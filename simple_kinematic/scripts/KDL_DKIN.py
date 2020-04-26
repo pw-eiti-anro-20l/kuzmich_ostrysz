@@ -8,12 +8,11 @@ import math
 from tf.transformations import *
 from sensor_msgs.msg import JointState
 from geometry_msgs.msg import PoseStamped
-from visualization_msgs.msg import Marker
 
 xaxis, yaxis, zaxis = (1, 0, 0), (0, 1, 0), (0, 0, 1)
 
 
-def correct(data):
+def correct_Position(data):
     if data.position[0] < borders['i1'][0] or data.position[0] > borders['i1'][1]:
         return False
 
@@ -26,8 +25,8 @@ def correct(data):
     return True
 
 
-def forward_kinematics(data):
-    if not correct(data):
+def simple_kinematics(data):
+    if not correct_Position(data):
         rospy.logerr('Incorrect position! ' + str(data))
         return
 
@@ -56,66 +55,38 @@ def forward_kinematics(data):
     joint3 = kdl.Joint(kdl.Joint.TransZ)
     kdlChain.addSegment(kdl.Segment(joint3, frame3))
 
-    jntAngles = kdl.JntArray(kdlChain.getNrOfJoints())
-    jntAngles[0] = data.position[0]
-    jntAngles[1] = data.position[1]
-    jntAngles[2] = -data.position[2] 
+    jointAngles = kdl.JntArray(kdlChain.getNrOfJoints())
+    jointAngles[0] = data.position[0]
+    jointAngles[1] = data.position[1]
+    jointAngles[2] = -data.position[2] 
 
     fksolver = kdl.ChainFkSolverPos_recursive(kdlChain)
-    eeFrame = kdl.Frame()
-    fksolver.JntToCart(jntAngles, eeFrame)
-    quaternion = eeFrame.M.GetQuaternion()
+    solvedFrame = kdl.Frame()
+    fksolver.JntToCart(jointAngles, solvedFrame)
+    quaternion = solvedFrame.M.GetQuaternion()
 
     pose = PoseStamped()
     pose.header.frame_id = 'base_link'
     pose.header.stamp = rospy.Time.now()
-    pose.pose.position.x = eeFrame.p[0]
-    pose.pose.position.y = eeFrame.p[1]
-    pose.pose.position.z = eeFrame.p[2]
+    pose.pose.position.x = solvedFrame.p[0]
+    pose.pose.position.y = solvedFrame.p[1]
+    pose.pose.position.z = solvedFrame.p[2]
     pose.pose.orientation.x = quaternion[0]
     pose.pose.orientation.y = quaternion[1]
     pose.pose.orientation.z = quaternion[2]
     pose.pose.orientation.w = quaternion[3]
     pub.publish(pose)
 
-    marker = Marker()
-    marker.header.frame_id = 'base_link'
-    marker.type = marker.SPHERE
-    marker.action = marker.ADD
-    marker.pose.orientation.w = 1
-
-    time = rospy.Duration()
-    marker.lifetime = time
-    marker.scale.x = 1
-    marker.scale.y = 1
-    marker.scale.z = 1
-    marker.pose.position.x = eeFrame.p[0]
-    marker.pose.position.y = eeFrame.p[1]
-    marker.pose.position.z = eeFrame.p[2]
-    marker.pose.orientation.x = quaternion[0]
-    marker.pose.orientation.y = quaternion[1]
-    marker.pose.orientation.z = quaternion[2]
-    marker.pose.orientation.w = quaternion[3]
-    marker.color.a = 0.7
-    marker.color.r = 0.0
-    marker.color.g = 1.0
-    marker.color.b = 0.0
-    marker_pub.publish(marker)
-
 if __name__ == '__main__':
-    rospy.init_node('KDL_KIN', anonymous=True)
-
-    pub = rospy.Publisher('manipulator', PoseStamped, queue_size=10)
-    marker_pub = rospy.Publisher('kdl_visualization', Marker, queue_size=100)
-
-    rospy.Subscriber('joint_states', JointState, forward_kinematics)
+    rospy.init_node('KDL_DKIN', anonymous=True)
+    pub = rospy.Publisher('pose_stamped', PoseStamped, queue_size=10)
+    rospy.Subscriber('joint_states', JointState, simple_kinematics)
 
     params = {}
-    print os.path.dirname(os.path.realpath(__file__))
     with open(os.path.dirname(os.path.realpath(__file__)) + '/../mdh_value.json', 'r') as file:
         params = json.loads(file.read())
 
-    borders = {}
+    bounds = {}
     with open(os.path.dirname(os.path.realpath(__file__)) + '/../borders.json', 'r') as file:
         borders = json.loads(file.read())
 

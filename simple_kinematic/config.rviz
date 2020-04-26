@@ -92,7 +92,7 @@ Visualization Manager:
       Value: true
       Visual Enabled: true
     - Alpha: 1
-      Axes Length: 0.5
+      Axes Length: 1
       Axes Radius: 0.10000000149011612
       Class: rviz/Pose
       Color: 0; 0; 0
@@ -100,15 +100,15 @@ Visualization Manager:
       Head Length: 0.30000001192092896
       Head Radius: 0.10000000149011612
       Name: Pose
-      Shaft Length: 1
-      Shaft Radius: 0.05000000074505806
-      Shape: Axes
-      Topic: /manipulator
+      Shaft Length: 0.5
+      Shaft Radius: 0.05999999865889549
+      Shape: Arrow
+      Topic: /pose_stamped
       Unreliable: false
       Value: true
     - Alpha: 1
       Axes Length: 1
-      Axes Radius: 0.05000000074505806
+      Axes Radius: 0.10000000149011612
       Class: rviz/Pose
       Color: 52; 101; 164
       Enabled: true
@@ -117,8 +117,8 @@ Visualization Manager:
       Name: Pose
       Shaft Length: 1
       Shaft Radius: 0.05000000074505806
-      Shape: Axes
-      Topic: /maniulator1
+      Shape: Arrow
+      Topic: /npose_stamped
       Unreliable: false
       Value: true
   Enabled: true
@@ -164,10 +164,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.574797511100769
+      Pitch: 0.22979751229286194
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 1.1753900051116943
+      Yaw: 0.5403932332992554
     Saved:
       - Class: rviz/Orbit
         Distance: 7.591248512268066
