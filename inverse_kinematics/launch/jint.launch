@@ -1,0 +1,7 @@
+<launch>
+    <param name="robot_description" command="xacro --inorder '$(find simple_kinematic)/urdf/movable.urdf'"/>
+    <param name="use_gui" value="true"/>
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+    <node name="jint" pkg="Interpolation" type="jint.py" output="screen"/>
+    <node name="rviz" pkg="rviz" type="rviz" args="-f base_link" required="true"/>
+</launch>

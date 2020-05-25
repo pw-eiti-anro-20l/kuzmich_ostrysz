@@ -1,0 +1,16 @@
+<launch>
+    <param name="robot_description" command="xacro --inorder '$(find inverse_kinematics)/urdf/movable.urdf'"/>
+    <param name="use_gui" value="false"/>
+    <param name="publish_default_positions" value="true"/>
+
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher">
+        <param name="use_tf_static" value="false" />
+        <param name="publish_frequency" value="50" />
+    </node>
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+        <rosparam param="source_list">["jstate"]</rosparam>
+    </node>
+    <node name="rviz" pkg="rviz" type="rviz" args="-f base_link" required="true"/>
+    <node name="oint" pkg="inverse_kinematics" type="oint.py"/>
+    <node name="ikin" pkg="inverse_kinematics" type="ikin.py"/>
+</launch>

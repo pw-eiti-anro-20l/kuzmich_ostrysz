@@ -1,0 +1,6 @@
+<launch>
+
+    <node name = "oint" pkg = "Interpolation" type = "oint.py"/>
+    <node name = "rviz" pkg = "rviz" type = "rviz" required = "true"/>
+
+</launch>

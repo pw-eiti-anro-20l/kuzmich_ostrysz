@@ -7,7 +7,7 @@ from std_msgs.msg import Header
 import math
 
 frequency = 50
-current_trans = [0, 0, 0]
+current_trans = [1, 1, 1]
 current_rot = [0, 0, 0, 1]
 
 def handle_interpolation(data):
@@ -56,7 +56,7 @@ def transformationPublisher():
     rate = rospy.Rate(100)
     pose = PoseStamped()
     while not rospy.is_shutdown():
-        pose.header.frame_id = 'base'
+        pose.header.frame_id = 'base_link'
         pose.header.stamp = rospy.Time.now()
         pose.pose.position.x = current_trans[0]
         pose.pose.position.y = current_trans[1]
